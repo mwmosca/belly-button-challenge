@@ -1,8 +1,14 @@
 // Get the data endpoint
 const url = 'https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json';
+let dataset = {};
+d3.json(url).then(function(data) {
+    for (i = 0; i < data['names'].length; i++) {
+        dataset[data['names'][i]] = data['samples'][i];
+    }
+});
 
 // Initializes the page with default plots
-function init() {
+function init() { 
     // Fetch the JSON data and create plots
     d3.json(url).then(function(data) {
         // Add data to the dropdown
@@ -23,6 +29,11 @@ function init() {
     
         Plotly.newPlot('bar',plots)
     });
+}
+
+// Updates plots when a new test subject is selected from the dropdown
+function optionChanged() {
+    let testSubjectId = d3.select('#selDataset').property('value');
 }
 
 init();
