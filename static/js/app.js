@@ -1,39 +1,41 @@
 // Get the data endpoint
 const url = 'https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json';
-let dataset = {};
+
+// Load the data to be used locally
+const dataset = {};
 d3.json(url).then(function(data) {
     for (i = 0; i < data['names'].length; i++) {
         dataset[data['names'][i]] = data['samples'][i];
     }
+
+    console.log(dataset[940].sample_values)
+    console.log(dataset[940].otu_ids)
+
+    init(dataset, 940);
 });
 
 // Initializes the page with default plots
-function init() { 
-    // Fetch the JSON data and create plots
-    d3.json(url).then(function(data) {
-        // Add data to the dropdown
-        let dropDown = d3.select('select');
-        for (i = 0; i < data['names'].length; i++) {
-            dropDown.append('option').text(data['names'][i]);
-        }
+function init(dataset, testSubjectId) { 
+    // Add data to the dropdown
+    let dropDown = d3.select('select');
+    for (const key in dataset) {
+        dropDown.append('option').text(key);
+    }
 
-        // Create a trace for a bar chart to display the top 10 OTUs found in the selected individual
-        let traceTop10 = {
-            type: 'bar',
-            orientation: 'h',
-            x: data.samples[0].sample_values.slice(0, 10).toReversed(),
-            y: data.samples[0].otu_ids.slice(0, 10).toReversed().map((x) => `OTU ${x}`)
-        };
-    
-        let plots = [traceTop10]
-    
-        Plotly.newPlot('bar',plots)
-    });
+    // Create a trace for a bar chart to display the top 10 OTUs found in the selected individual
+    let traceTop10 = {
+        type: 'bar',
+        orientation: 'h',
+        x: dataset[testSubjectId].sample_values.slice(0, 10).toReversed(),
+        y: dataset[testSubjectId].otu_ids.slice(0, 10).toReversed().map((x) => `OTU ${x}`)
+    };
+
+    let plots = [traceTop10]
+
+    Plotly.newPlot('bar',plots)
 }
 
 // Updates plots when a new test subject is selected from the dropdown
 function optionChanged() {
     let testSubjectId = d3.select('#selDataset').property('value');
 }
-
-init();
