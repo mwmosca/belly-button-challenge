@@ -8,9 +8,6 @@ d3.json(url).then(function(data) {
         dataset[data['names'][i]] = data['samples'][i];
     }
 
-    console.log(dataset[940].sample_values)
-    console.log(dataset[940].otu_ids)
-
     init(dataset, 940);
 });
 
@@ -22,17 +19,20 @@ function init(dataset, testSubjectId) {
         dropDown.append('option').text(key);
     }
 
-    // Create a trace for a bar chart to display the top 10 OTUs found in the selected individual
+    // Set up plots
+    createBar(dataset[testSubjectId]);
+}
+
+// Create a trace for a bar chart to display the top 10 OTUs found in the selected individual
+function createBar(testSubjectData) {
     let traceTop10 = {
         type: 'bar',
         orientation: 'h',
-        x: dataset[testSubjectId].sample_values.slice(0, 10).toReversed(),
-        y: dataset[testSubjectId].otu_ids.slice(0, 10).toReversed().map((x) => `OTU ${x}`)
+        x: testSubjectData.sample_values.slice(0, 10).toReversed(),
+        y: testSubjectData.otu_ids.slice(0, 10).toReversed().map((x) => `OTU ${x}`)
     };
-
-    let plots = [traceTop10]
-
-    Plotly.newPlot('bar',plots)
+    let plots = [traceTop10];
+    Plotly.newPlot('bar',plots);
 }
 
 // Updates plots when a new test subject is selected from the dropdown
