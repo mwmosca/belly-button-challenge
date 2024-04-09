@@ -23,6 +23,11 @@ function init(dataset, testSubjectId) {
     createBar(dataset[testSubjectId]);
 }
 
+// Updates plots when a new test subject is selected from the dropdown
+function optionChanged() {
+    let testSubjectId = d3.select('#selDataset').property('value');
+}
+
 // Create a trace for a bar chart to display the top 10 OTUs found in the selected individual
 function createBar(testSubjectData) {
     let traceTop10 = {
@@ -33,9 +38,4 @@ function createBar(testSubjectData) {
     };
     let plots = [traceTop10];
     Plotly.newPlot('bar',plots);
-}
-
-// Updates plots when a new test subject is selected from the dropdown
-function optionChanged() {
-    let testSubjectId = d3.select('#selDataset').property('value');
 }
