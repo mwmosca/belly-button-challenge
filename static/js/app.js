@@ -9,6 +9,7 @@ d3.json(url).then(function(data) {
         dataset[data['names'][i]] = data['samples'][i];
     }
 
+    // Initialize the webpage
     init(dataset, 940);
 });
 
