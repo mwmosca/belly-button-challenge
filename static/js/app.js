@@ -40,5 +40,10 @@ function createBar(testSubjectData) {
         y: testSubjectData.otu_ids.slice(0, 10).toReversed().map((x) => `OTU ${x}`)
     };
     let plots = [traceTop10];
-    Plotly.newPlot('bar',plots);
+    let layout = {
+        title: {
+            text: 'Top 10 Bacteria Cultures Found'
+        }
+    };
+    Plotly.newPlot('bar', plots, layout);
 }
