@@ -6,7 +6,17 @@ const dataset = {};
 d3.json(url).then(function(data) {
     // Load the data to be used locally
     for (i = 0; i < data['names'].length; i++) {
-        dataset[data['names'][i]] = data['samples'][i];
+        dataset[data['names'][i]] = {
+            samples: data['samples'][i],
+            metadata: 
+`ID: ${data['metadata'][i]['id']}
+ETHNICITY: ${data['metadata'][i]['ethnicity']}
+GENDER: ${data['metadata'][i]['gender']}
+AGE: ${data['metadata'][i]['age']}
+LOCATION: ${data['metadata'][i]['location']}
+BBTYPE: ${data['metadata'][i]['bbtype']}
+WFREQ: ${data['metadata'][i]['wfreq']}`
+        };
     }
 
     // Initialize the webpage
@@ -22,15 +32,15 @@ function init(dataset, testSubjectId) {
     }
 
     // Set up plots
-    createBar(dataset[testSubjectId]);
-    createBubble(dataset[testSubjectId]);
+    createBar(dataset[testSubjectId]['samples']);
+    createBubble(dataset[testSubjectId]['samples']);
 }
 
 // Updates plots when a new test subject is selected from the dropdown
 function optionChanged() {
     let testSubjectId = d3.select('#selDataset').property('value');
-    createBar(dataset[testSubjectId]);
-    createBubble(dataset[testSubjectId]);
+    createBar(dataset[testSubjectId]['samples']);
+    createBubble(dataset[testSubjectId]['samples']);
 }
 
 // Create a bar chart to display the top 10 OTUs found in the selected individual
@@ -84,4 +94,8 @@ function createBubble(testSubjectData) {
         }
     };
     Plotly.newPlot('bubble', plots, layout);
+}
+
+function createMetadata(testSubjectData) {
+
 }
