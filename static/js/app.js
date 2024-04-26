@@ -50,7 +50,8 @@ function createBar(testSubjectData) {
         type: 'bar',
         orientation: 'h',
         x: testSubjectData.sample_values.slice(0, 10).toReversed(),
-        y: testSubjectData.otu_ids.slice(0, 10).toReversed().map((x) => `OTU ${x}`)
+        y: testSubjectData.otu_ids.slice(0, 10).toReversed().map((x) => `OTU ${x}`),
+        text: testSubjectData.otu_labels
     };
     let plots = [traceBar];
     let layout = {
