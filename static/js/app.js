@@ -5,24 +5,24 @@ const dataset = {};
 
 d3.json(url).then(function(data) {
     // Load the data to be used locally
-    for (i = 0; i < data['names'].length; i++) {
-        dataset[data['names'][i]] = {
-            samples: data['samples'][i],
-            metadata: ` ID: ${data['metadata'][i]['id']}
-                        ETHNICITY: ${data['metadata'][i]['ethnicity']}
-                        GENDER: ${data['metadata'][i]['gender']}
-                        AGE: ${data['metadata'][i]['age']}
-                        LOCATION: ${data['metadata'][i]['location']}
-                        BBTYPE: ${data['metadata'][i]['bbtype']}
-                        WFREQ: ${data['metadata'][i]['wfreq']}`
+    for (i = 0; i < data.names.length; i++) {
+        dataset[data.names[i]] = {
+            samples: data.samples[i],
+            metadata: ` ID: ${data.metadata[i].id}<br>
+                        ETHNICITY: ${data.metadata[i].ethnicity}<br>
+                        GENDER: ${data.metadata[i].gender}<br>
+                        AGE: ${data.metadata[i].age}<br>
+                        LOCATION: ${data.metadata[i].location}<br>
+                        BBTYPE: ${data.metadata[i].bbtype}<br>
+                        WFREQ: ${data.metadata[i].wfreq}`
         };
     }
 
     // Initialize the webpage
-    init(dataset, data['names'][0]);
+    init(dataset, data.names[0]);
 });
 
-// Initializes the page with default plots
+// Initializes the page with default plots and demographic info
 function init(dataset, testSubjectId) { 
     // Add test subject IDs to the dropdown
     let dropDown = d3.select('#selDataset');
@@ -31,17 +31,17 @@ function init(dataset, testSubjectId) {
     }
 
     // Set up plots and demographic info
-    createBar(dataset[testSubjectId]['samples']);
-    createBubble(dataset[testSubjectId]['samples']);
-    d3.select('#sample-metadata').append('card-text').text(dataset[testSubjectId]['metadata']);
+    createBar(dataset[testSubjectId].samples);
+    createBubble(dataset[testSubjectId].samples);
+    d3.select('#sample-metadata').append('card-text').html(dataset[testSubjectId].metadata);
 }
 
 // Updates plots and demographic info when a new test subject is selected from the dropdown
 function optionChanged() {
     let testSubjectId = d3.select('#selDataset').property('value');
-    createBar(dataset[testSubjectId]['samples']);
-    createBubble(dataset[testSubjectId]['samples']);
-    d3.select('card-text').text(dataset[testSubjectId]['metadata']);
+    createBar(dataset[testSubjectId].samples);
+    createBubble(dataset[testSubjectId].samples);
+    d3.select('card-text').html(dataset[testSubjectId].metadata);
 }
 
 // Create a bar chart to display the top 10 OTUs found in the selected individual
